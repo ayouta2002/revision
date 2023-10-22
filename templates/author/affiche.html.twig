@@ -1,0 +1,12 @@
+<h1>LISTES AUTHORS</h1>
+<table border="1">
+ <tr>    
+     <th> UserName </th>
+     <th> Email </th>
+ </tr>
+ <tr> {% for a in author %}</tr>
+ <td> {{a.username}} </td>
+ <td> {{a.email}} </td>
+ {% endfor %}
+ 
+</table>
