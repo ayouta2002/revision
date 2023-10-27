@@ -8,12 +8,10 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\AuthorRepository;
 use App\Entity\Author;
 use Doctrine\ORM\EntityManagerInterface;
-
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use App\Form\AuthorType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
-
 
 
 class AuthorController extends AbstractController
@@ -84,6 +82,58 @@ class AuthorController extends AbstractController
         $entityManager->flush();
 
         return $this->redirectToRoute('app_affichage'); // Redirigez vers la route 'app_affichage'
-            }    
+            }  
+            
+           #[Route('/Add', name: 'app_Add')]
+           public function  Add (Request  $request)
+         {
+              $author=new Author();
+              $form =$this->CreateForm(AuthorType::class,$author);
+              $form->add('Ajouter',SubmitType::class);
+              $form->handleRequest($request);
+           
+              if ($form->isSubmitted() && $form->isValid())
+    
+              {
+        $em=$this->getDoctrine()->getManager();
+        $em->persist($author);
+        $em->flush();
+        return $this->redirectToRoute('app_affichage');
+              }
+                  return $this->render('author/Add.html.twig',['f'=>$form->createView()]);
+           }
+
+        #[Route('/delete/{id}', name: 'app_delete')]
+        public function delete($id, AuthorRepository $repository)
+           {
+               $author = $repository->find($id);
+
+                if (!$author) {
+                 throw $this->createNotFoundException('Auteur non trouvé');  }
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($author);
+        $em->flush();
+           return $this->redirectToRoute('app_affichage');
+            }
+
+            #[Route('/edit/{id}', name: 'app_edit')]
+            public function edit(AuthorRepository $repository, $id, Request $request)
+    {
+        $author = $repository->find($id);
+        $form = $this->createForm(AuthorType::class, $author);
+        $form->add('Edit', SubmitType::class);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->flush(); // Correction : Utilisez la méthode flush() sur l'EntityManager pour enregistrer les modifications en base de données.
+            return $this->redirectToRoute('app_affichage');
+        }
+
+        return $this->render('author/edit.html.twig', [
+            'f' => $form->createView(),
+        ]);
+    }
+
         }
 

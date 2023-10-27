@@ -1,0 +1,17 @@
+<h1>LISTES Boissons</h1>
+<table border="1">
+ <tr>    
+     <th> Id </th>
+     <th> nb_calories </th>
+     <th> Type_de_bouteille </th>
+    
+ </tr>
+ <tr> {% for c in boisson %}</tr>
+ <td> {{c.nb_calories}} </td>
+ <td> {{c.type_de_bouteille}} </td>
+ 
+ {% endfor %}
+
+</table>
+<hr>
+<button onclick="window.location='{{ path('app_Addboisson') }}'" class="btn btn-primary"> Ajouter un boisson</button>

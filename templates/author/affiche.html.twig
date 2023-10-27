@@ -3,10 +3,16 @@
  <tr>    
      <th> UserName </th>
      <th> Email </th>
+     <th>edit</th>
+     <th>delete</th>
  </tr>
  <tr> {% for a in author %}</tr>
  <td> {{a.username}} </td>
  <td> {{a.email}} </td>
+ <td><a href="{{ path('app_edit', {'id': a.id}) }}">edit</a></td>
+     <td><a href="{{ path('app_delete', {'id': a.id}) }}">delete</a></td>
  {% endfor %}
- 
+
 </table>
+<hr>
+<button onclick="window.location='{{ path('app_Add') }}'" class="btn btn-primary"> Ajouter un Auteur</button>
